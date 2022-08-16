@@ -21,6 +21,7 @@ public class StockScheduler {
     @Autowired
     private JobLauncher jobLauncher;
 
+
     @Scheduled(cron = "0/30 * * ? * *")
     public void processStockData() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         jobLauncher.run(job,new JobParametersBuilder().addString("JobID",String.valueOf(System.currentTimeMillis())).toJobParameters());

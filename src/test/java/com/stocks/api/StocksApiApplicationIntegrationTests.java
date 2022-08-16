@@ -1,5 +1,6 @@
 package com.stocks.api;
 
+import com.stocks.api.batch.scheduler.StockScheduler;
 import com.stocks.api.contoller.StocksController;
 import org.junit.jupiter.api.Test;
 
@@ -24,16 +25,21 @@ class StocksApiApplicationIntegrationTests {
 	@Autowired
 	StocksController stocksController;
 
+	@Autowired
+	private StockScheduler stockScheduler;
+
 	@Test
-	void getAverageDatapositive() throws Exception {
+	void runTheSchedulerAndFetchData() throws Exception {
+		stockScheduler.processStockData();
+
 		mockMvc= MockMvcBuilders.standaloneSetup(stocksController).build();
-		String city="mumbai";
 		mockMvc.perform( MockMvcRequestBuilders
-						.get("/data?city="+city)
+						.get("/data")
 						.accept(MediaType.APPLICATION_JSON))
-						.andDo(print())
-						.andExpect(status().isOk())
-						.andExpect(jsonPath("$.city_name",is(city)));
+				.andDo(print())
+				.andExpect(status().isOk());
+
 	}
+
 
 }
